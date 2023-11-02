@@ -15,7 +15,7 @@ import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class JaysSeleniumTools {
+public class JST {
 
 	public static WebDriver driver=null;
 	public static Actions ac = null;	
@@ -35,6 +35,7 @@ public class JaysSeleniumTools {
 		System.out.println(temp);
 		temp = driver.getCurrentUrl();
 		System.out.println(temp);
+		driver.navigate().refresh();
 	}
 
 	public static By getBy(String path, LocType type) {
@@ -90,13 +91,24 @@ public class JaysSeleniumTools {
 		return wait;
 	}
 	
-	public static void mouseOver(String path, LocType type) {
+	public static Actions getAc() {
 		if (ac==null) {
 			ac = new Actions(driver);
 		}
-		
-		ac.moveToElement(getWebElement(path,type)).build().perform();
+		return ac;
 	}
 	
+	public static void mouseOver(String path, LocType type) {
+		
+		getAc().moveToElement(getWebElement(path,type)).build().perform();
+	}
 	
+	public static Actions actionClick(String path, LocType type) {
+		return getAc().moveToElement(getWebElement(path,type)).click();
+	}
+
+	public static Actions rightClick(String path, LocType type) {
+		return getAc().moveToElement(getWebElement(path,type)).contextClick();
+	}
+
 }
