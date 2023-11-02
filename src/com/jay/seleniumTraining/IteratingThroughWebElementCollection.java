@@ -11,25 +11,46 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 public class IteratingThroughWebElementCollection {
 
-	public static void main(String[] args) throws InterruptedException {
-		WebDriver driver = new ChromeDriver();
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+	public static WebDriver driver = new ChromeDriver();
+
+	public static void intitialize(int impWaitSecs) {
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(impWaitSecs));
 		driver.manage().window().maximize();
+	}
 
-		driver.get("https://rahulshettyacademy.com/seleniumPractise/#/");
-		String temp = driver.getTitle();
-		System.out.println(temp);
+	public static void main(String[] args) throws InterruptedException {
 
-		temp = driver.getCurrentUrl();
-		System.out.println(temp);
+		int impWaitSecs = 5;
+		String site = "https://rahulshettyacademy.com/seleniumPractise/#/";
+		String promoCd = "rahulshettyacademy";
 
-		// get collection
-		List<WebElement> products = driver.findElements(By.cssSelector("h4[class='product-name']"));
-
-		List<String> veggies = new ArrayList();
+		List<String> veggies = new ArrayList<String>();
 		veggies.add("Cucumber");
 		veggies.add("Brocolli");
 		veggies.add("Beetroot");
+
+		intitialize(impWaitSecs);
+		openWindow(site);
+
+		pickAndAddToCart(veggies);
+		checkout(promoCd);
+	}
+
+	private static void checkout(String promoCd) {
+		
+		//click shopping cart window
+		driver.findElement(By.cssSelector("a[class='cart-icon']")).click();
+		
+		//click proceed to checkout
+		driver.findElement(By.xpath("//div[@class='cart-preview active']/div/button")).click();
+		
+		//enter promo code
+		driver.findElement(By.cssSelector("")).sendKeys(promoCd);
+	}
+
+	private static void pickAndAddToCart(List<String> veggies) {
+		// get collection
+		List<WebElement> products = driver.findElements(By.cssSelector("h4[class='product-name']"));
 
 		veggies.forEach(veggie -> {
 			for (int i = 0; i < products.size(); i++) {
@@ -40,6 +61,15 @@ public class IteratingThroughWebElementCollection {
 			}
 
 		});
+	}
+
+	private static void openWindow(String site) {
+		driver.get(site);
+
+		String temp = driver.getTitle();
+		System.out.println(temp);
+		temp = driver.getCurrentUrl();
+		System.out.println(temp);
 	}
 
 }
