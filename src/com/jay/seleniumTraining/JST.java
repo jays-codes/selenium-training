@@ -65,12 +65,16 @@ public class JST {
 		return driver.findElements(getBy(path, loctype));
 	}
 
+	public static void waitUntilElementClickable(int i, String path, LocType loctype) {
+		explicitlyWait(i).until(ExpectedConditions.elementToBeClickable(getBy(path, loctype)));
+	}	
+	
 	public static void waitUntilElementVisible(int i, String path, LocType loctype) {
 		explicitlyWait(i).until(ExpectedConditions.visibilityOfElementLocated(getBy(path, loctype)));
 	}
 
 	public static void fwaitUntilElementVisible(int total, int intv, String path, LocType loctype) {
-
+		checkDriver();
 		Wait<WebDriver> wait = new FluentWait<WebDriver>(driver).withTimeout(Duration.ofSeconds(total))
 				.pollingEvery(Duration.ofSeconds(intv)).ignoring(NoSuchElementException.class);
 
@@ -86,7 +90,12 @@ public class JST {
 		});
 	}
 
-	public static WebDriverWait explicitlyWait(int i) {
+	private static void checkDriver() {
+		if (driver==null) driver = new ChromeDriver();
+		
+	}
+
+	private static WebDriverWait explicitlyWait(int i) {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(i));
 		return wait;
 	}

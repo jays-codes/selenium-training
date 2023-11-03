@@ -40,10 +40,10 @@ public class Assignment3 {
 		idSelect("okayBtn").click();
 
 		
-//		WebElement we = cssSelect("select");
-//		Select drpdwn = new Select(we);
-//		drpdwn.selectByVisibleText("Consultant");
-//		System.out.println(drpdwn.getFirstSelectedOption().getText());
+		WebElement we = cssSelect("select");
+		Select drpdwn = new Select(we);
+		drpdwn.selectByVisibleText("Consultant");
+		System.out.println(drpdwn.getFirstSelectedOption().getText());
 		
 		xpathSelect("//select/option[@value='consult']").click();
 		xpathSelect("//span[@class='text-white termsText']/a").click();
