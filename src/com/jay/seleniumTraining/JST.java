@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -25,6 +26,7 @@ public class JST {
 	}
 	
 	public static void setImplicitWait(int impWaitSecs) {
+		checkDriver();
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(impWaitSecs));
 	}
 
@@ -65,14 +67,18 @@ public class JST {
 		return driver.findElements(getBy(path, loctype));
 	}
 
-	public static void waitUntilElementClickable(int i, String path, LocType loctype) {
-		explicitlyWait(i).until(ExpectedConditions.elementToBeClickable(getBy(path, loctype)));
-	}	
+//	public static void waitUntilElementClickable(int i, String path, LocType loctype) {
+//		explicitlyWait(i).until(ExpectedConditions.elementToBeClickable(getBy(path, loctype)));
+//	}	
 	
 	public static void waitUntilElementVisible(int i, String path, LocType loctype) {
-		explicitlyWait(i).until(ExpectedConditions.visibilityOfElementLocated(getBy(path, loctype)));
+		explicitlyWait(i).until(ExpectedConditions.visibilityOf(getWebElement(path, loctype)));
 	}
 
+	public static void waitUntilElementClickable(int i, String path, LocType loctype) {
+		explicitlyWait(i).until(ExpectedConditions.elementToBeClickable(getWebElement(path, loctype)));
+	}
+	
 	public static void fwaitUntilElementVisible(int total, int intv, String path, LocType loctype) {
 		checkDriver();
 		Wait<WebDriver> wait = new FluentWait<WebDriver>(driver).withTimeout(Duration.ofSeconds(total))
@@ -90,6 +96,7 @@ public class JST {
 		});
 	}
 
+
 	private static void checkDriver() {
 		if (driver==null) driver = new ChromeDriver();
 		
@@ -97,6 +104,7 @@ public class JST {
 
 	private static WebDriverWait explicitlyWait(int i) {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(i));
+		
 		return wait;
 	}
 	
