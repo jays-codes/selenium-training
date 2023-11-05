@@ -52,7 +52,7 @@ public class WebTableStreams {
 		
 		//click on column
 		driver.findElement(By.xpath("//tr/th[1]")).click();
-		driver.findElement(By.xpath("//tr/th[1]")).click();
+		//driver.findElement(By.xpath("//tr/th[1]")).click();
 		
 		//capture elements into list
 		//make list of strings
@@ -74,8 +74,35 @@ public class WebTableStreams {
 			System.out.println(s);
 		});
 
-		
 		Assert.assertTrue(veglist.equals(sorted));
+		
+		//price searching and paginating
+		String veg = "Strawberry";
+		
+		List<String> price = null;
+		
+		do {
+			price = driver.findElements(By.xpath("//tr/td[1]"))
+					.stream().filter(s->s.getText().contains(veg))
+					.map(s->getprice(s))
+					.collect(Collectors.toList());			
+			
+			if (price.size()>0) break;
+			
+			//click for next page
+			driver.findElement(By.cssSelector("a[aria-label='Next']")).click();
+			//Thread.sleep(1000);
+		} while (price.size() < 1);
+	
+		
+		price.forEach(s->System.out.print(s));
+		System.out.println(" is the price of " + veg);
+		driver.close();
+
+	}	
+	
+	private static String getprice(WebElement elem) {
+		return elem.findElement(By.xpath("following-sibling::td[1]")).getText();		
 	}
 	
 }
