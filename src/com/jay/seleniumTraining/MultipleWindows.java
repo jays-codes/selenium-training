@@ -67,7 +67,7 @@ public class MultipleWindows {
 //		FileUtils.copyFile(namess, new File("C:\\Users\\zai_m\\selenium\\screenshot4.png"));
 		
 		//getHeight and Width
-		nameEl.getRect().getDimension().getHeight()
+		nameEl.getRect().getDimension().getHeight();
 		
 		driver.close();
 	}	
